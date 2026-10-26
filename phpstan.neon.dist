@@ -1,0 +1,14 @@
+parameters:
+    level: 5
+    paths:
+        - src
+    tmpDir: var/phpstan
+    # symfony/config's fluent TreeBuilder/NodeBuilder API types differently
+    # enough between the 6.4.x this package's PHP 8.1 CI job resolves and the
+    # 7.x newer jobs resolve (children()/arrayNode()/scalarNode() etc. return
+    # NodeParentInterface instead of the concrete NodeBuilder in some
+    # releases) that no single PHPDoc hint satisfies every supported
+    # combination. Covered by tests/DependencyInjection/ConfigurationTest.php
+    # instead - purely declarative config-tree building, low bug risk.
+    excludePaths:
+        - src/DependencyInjection/Configuration.php

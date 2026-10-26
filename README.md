@@ -493,7 +493,7 @@ the main store).
 ```bash
 composer install
 vendor/bin/phpunit
-vendor/bin/phpstan analyse src --level 5
+vendor/bin/phpstan analyse
 ```
 
 Code style aligns consecutive `=` and `=>` signs within a block, done by hand rather than by

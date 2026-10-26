@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WatchDiff\Symfony\DependencyInjection;
 
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -13,7 +14,15 @@ final class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder('watch_diff');
 
-        $treeBuilder->getRootNode()
+        // TreeBuilder::getRootNode() is statically typed to the generic
+        // NodeDefinition in some symfony/config versions (it's always an
+        // ArrayNodeDefinition at runtime for a tree built with the default
+        // 'array' root type) - without this hint, PHPStan can't see
+        // children() below on versions where the return type isn't narrowed.
+        /** @var ArrayNodeDefinition $rootNode */
+        $rootNode = $treeBuilder->getRootNode();
+
+        $rootNode
             ->children()
                 ->scalarNode('config_path')->defaultValue('%kernel.project_dir%/watchdiff.config.json')->end()
                 ->arrayNode('store')
